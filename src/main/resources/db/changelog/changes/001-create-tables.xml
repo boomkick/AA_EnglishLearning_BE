@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="001-01" author="system">
+        <createTable tableName="skill">
+            <column name="id" type="varchar(32)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="label" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="001-02" author="system">
+        <createTable tableName="app_user">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password_hash" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_name" type="varchar(128)"/>
+            <column name="xp_total" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="weekly_xp_target" type="int" defaultValueNumeric="450">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reward_points_used" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp" defaultValueComputed="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="app_user" indexName="idx_app_user_email">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="001-03" author="system">
+        <createTable tableName="mission_template">
+            <column name="id" type="varchar(64)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="skill_id" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="xp" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="est_minutes" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="difficulty" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+            baseTableName="mission_template" baseColumnNames="skill_id"
+            referencedTableName="skill" referencedColumnNames="id"
+            constraintName="fk_mission_template_skill"/>
+    </changeSet>
+
+    <changeSet id="001-04" author="system">
+        <createTable tableName="mission_log">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="log_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mission_template_id" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="skill_id" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_minutes" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="xp_earned" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="difficulty" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="notes" type="text"/>
+        </createTable>
+        <addForeignKeyConstraint
+            baseTableName="mission_log" baseColumnNames="user_id"
+            referencedTableName="app_user" referencedColumnNames="id"
+            constraintName="fk_mission_log_user"/>
+        <addForeignKeyConstraint
+            baseTableName="mission_log" baseColumnNames="mission_template_id"
+            referencedTableName="mission_template" referencedColumnNames="id"
+            constraintName="fk_mission_log_template"/>
+        <addForeignKeyConstraint
+            baseTableName="mission_log" baseColumnNames="skill_id"
+            referencedTableName="skill" referencedColumnNames="id"
+            constraintName="fk_mission_log_skill"/>
+        <createIndex tableName="mission_log" indexName="idx_mission_log_user_date">
+            <column name="user_id"/>
+            <column name="log_date"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="001-05" author="system">
+        <createTable tableName="weekly_plan">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="week_start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="xp_target" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="skill_focus_percentages" type="jsonb"/>
+        </createTable>
+        <addForeignKeyConstraint
+            baseTableName="weekly_plan" baseColumnNames="user_id"
+            referencedTableName="app_user" referencedColumnNames="id"
+            constraintName="fk_weekly_plan_user"/>
+        <createIndex tableName="weekly_plan" indexName="idx_weekly_plan_user_week">
+            <column name="user_id"/>
+            <column name="week_start_date"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="001-06" author="system">
+        <createTable tableName="writing_feedback">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="prompt" type="text"/>
+            <column name="text_content" type="text"/>
+            <column name="corrections" type="jsonb"/>
+            <column name="repeated_mistake_tags" type="jsonb"/>
+        </createTable>
+        <addForeignKeyConstraint
+            baseTableName="writing_feedback" baseColumnNames="user_id"
+            referencedTableName="app_user" referencedColumnNames="id"
+            constraintName="fk_writing_feedback_user"/>
+    </changeSet>
+
+    <changeSet id="001-07" author="system">
+        <createTable tableName="speaking_feedback">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audio_file_name" type="varchar(255)"/>
+            <column name="checklist" type="jsonb"/>
+            <column name="comments" type="text"/>
+            <column name="issue_tags" type="jsonb"/>
+        </createTable>
+        <addForeignKeyConstraint
+            baseTableName="speaking_feedback" baseColumnNames="user_id"
+            referencedTableName="app_user" referencedColumnNames="id"
+            constraintName="fk_speaking_feedback_user"/>
+    </changeSet>
+
+    <changeSet id="001-08" author="system">
+        <createTable tableName="vocab_item">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="term" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="topic_tags" type="jsonb"/>
+            <column name="collocations" type="jsonb"/>
+            <column name="examples" type="jsonb"/>
+            <column name="usage_notes" type="text"/>
+        </createTable>
+        <addForeignKeyConstraint
+            baseTableName="vocab_item" baseColumnNames="user_id"
+            referencedTableName="app_user" referencedColumnNames="id"
+            constraintName="fk_vocab_item_user"/>
+    </changeSet>
+
+</databaseChangeLog>

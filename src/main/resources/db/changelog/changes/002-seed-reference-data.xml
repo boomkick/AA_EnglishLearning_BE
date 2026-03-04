@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="002-01" author="system">
+        <insert tableName="skill"><column name="id" value="reading"/><column name="label" value="Reading"/></insert>
+        <insert tableName="skill"><column name="id" value="listening"/><column name="label" value="Listening"/></insert>
+        <insert tableName="skill"><column name="id" value="speaking"/><column name="label" value="Speaking"/></insert>
+        <insert tableName="skill"><column name="id" value="writing"/><column name="label" value="Writing"/></insert>
+        <insert tableName="skill"><column name="id" value="vocabulary"/><column name="label" value="Vocabulary"/></insert>
+    </changeSet>
+
+    <changeSet id="002-02" author="system">
+        <insert tableName="mission_template">
+            <column name="id" value="listen-dictation-2m"/>
+            <column name="skill_id" value="listening"/>
+            <column name="title" value="2-min dictation"/>
+            <column name="description" value="Pick a short clip, write exactly what you hear, then compare."/>
+            <column name="xp" valueNumeric="30"/>
+            <column name="est_minutes" valueNumeric="10"/>
+            <column name="difficulty" valueNumeric="3"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="listen-shadowing-5m"/>
+            <column name="skill_id" value="listening"/>
+            <column name="title" value="5-min shadowing"/>
+            <column name="description" value="Shadow a transcript. Focus on linking and ending sounds."/>
+            <column name="xp" valueNumeric="25"/>
+            <column name="est_minutes" valueNumeric="8"/>
+            <column name="difficulty" valueNumeric="2"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="speak-summary-90s"/>
+            <column name="skill_id" value="speaking"/>
+            <column name="title" value="90s summary speaking"/>
+            <column name="description" value="Speak a summary of what you learned. Record once; improve once."/>
+            <column name="xp" valueNumeric="35"/>
+            <column name="est_minutes" valueNumeric="10"/>
+            <column name="difficulty" valueNumeric="3"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="speak-pronunciation-drill"/>
+            <column name="skill_id" value="speaking"/>
+            <column name="title" value="Pronunciation drill (ending sounds)"/>
+            <column name="description" value="10 phrases. Slow, clear, slightly faster. No rushing."/>
+            <column name="xp" valueNumeric="20"/>
+            <column name="est_minutes" valueNumeric="7"/>
+            <column name="difficulty" valueNumeric="2"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="write-micro-essay-120w"/>
+            <column name="skill_id" value="writing"/>
+            <column name="title" value="Micro essay (120 words)"/>
+            <column name="description" value="One idea, simple grammar, clarity first. Highlight 3 mistakes."/>
+            <column name="xp" valueNumeric="45"/>
+            <column name="est_minutes" valueNumeric="18"/>
+            <column name="difficulty" valueNumeric="4"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="write-rewrite"/>
+            <column name="skill_id" value="writing"/>
+            <column name="title" value="Rewrite for clarity"/>
+            <column name="description" value="Rewrite a paragraph to be simpler and more direct."/>
+            <column name="xp" valueNumeric="25"/>
+            <column name="est_minutes" valueNumeric="10"/>
+            <column name="difficulty" valueNumeric="3"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="read-article-10m"/>
+            <column name="skill_id" value="reading"/>
+            <column name="title" value="10-min reading (95% comprehension)"/>
+            <column name="description" value="Choose relevant material. Don't translate word-by-word."/>
+            <column name="xp" valueNumeric="30"/>
+            <column name="est_minutes" valueNumeric="10"/>
+            <column name="difficulty" valueNumeric="2"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="read-highlight-phrases"/>
+            <column name="skill_id" value="reading"/>
+            <column name="title" value="Highlight 10 useful phrases"/>
+            <column name="description" value="Extract phrases you can reuse in writing/speaking."/>
+            <column name="xp" valueNumeric="20"/>
+            <column name="est_minutes" valueNumeric="8"/>
+            <column name="difficulty" valueNumeric="2"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="vocab-collocations-12"/>
+            <column name="skill_id" value="vocabulary"/>
+            <column name="title" value="12 collocations (topic-based)"/>
+            <column name="description" value="Pick a topic; learn collocations with example sentences."/>
+            <column name="xp" valueNumeric="25"/>
+            <column name="est_minutes" valueNumeric="10"/>
+            <column name="difficulty" valueNumeric="3"/>
+        </insert>
+        <insert tableName="mission_template">
+            <column name="id" value="vocab-quiz-10"/>
+            <column name="skill_id" value="vocabulary"/>
+            <column name="title" value="Quiz mode (10 items)"/>
+            <column name="description" value="Quick recall + usage. Focus on active output."/>
+            <column name="xp" valueNumeric="20"/>
+            <column name="est_minutes" valueNumeric="6"/>
+            <column name="difficulty" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
